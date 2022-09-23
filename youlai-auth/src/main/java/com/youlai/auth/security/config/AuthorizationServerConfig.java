@@ -6,7 +6,6 @@ import cn.hutool.http.HttpStatus;
 import cn.hutool.json.JSONUtil;
 import com.youlai.auth.security.core.clientdetails.ClientDetailsServiceImpl;
 import com.youlai.auth.security.core.userdetails.member.MemberUserDetails;
-import com.youlai.auth.security.core.userdetails.member.MemberUserDetailsServiceImpl;
 import com.youlai.auth.security.core.userdetails.user.SysUserDetails;
 import com.youlai.auth.security.core.userdetails.user.SysUserDetailsServiceImpl;
 import com.youlai.auth.security.extension.captcha.CaptchaTokenGranter;
@@ -57,7 +56,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private final AuthenticationManager authenticationManager;
     private final ClientDetailsServiceImpl clientDetailsService;
     private final SysUserDetailsServiceImpl sysUserDetailsService;
-    private final MemberUserDetailsServiceImpl memberUserDetailsService;
     private final StringRedisTemplate stringRedisTemplate;
 
     /**
@@ -137,8 +135,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         // 多用户体系下，刷新token再次认证客户端ID和 UserDetailService 的映射Map
         Map<String, UserDetailsService> clientUserDetailsServiceMap = new HashMap<>();
         clientUserDetailsServiceMap.put(SecurityConstants.ADMIN_CLIENT_ID, sysUserDetailsService); // 系统管理客户端
-        clientUserDetailsServiceMap.put(SecurityConstants.APP_CLIENT_ID, memberUserDetailsService); // Android、IOS、H5 移动客户端
-        clientUserDetailsServiceMap.put(SecurityConstants.WEAPP_CLIENT_ID, memberUserDetailsService); // 微信小程序客户端
 
         // 刷新token模式下，重写预认证提供者替换其AuthenticationManager，可自定义根据客户端ID和认证方式区分用户体系获取认证用户信息
         PreAuthenticatedAuthenticationProvider provider = new PreAuthenticatedAuthenticationProvider();

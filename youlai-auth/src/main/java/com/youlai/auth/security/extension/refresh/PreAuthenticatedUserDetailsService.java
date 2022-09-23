@@ -1,6 +1,5 @@
 package com.youlai.auth.security.extension.refresh;
 
-import com.youlai.auth.security.core.userdetails.member.MemberUserDetailsServiceImpl;
 import com.youlai.common.base.IBaseEnum;
 import com.youlai.common.constant.SecurityConstants;
 import com.youlai.common.enums.AuthenticationIdentityEnum;
@@ -56,25 +55,7 @@ public class PreAuthenticatedUserDetailsService<T extends Authentication> implem
         // 获取认证身份标识，默认是用户名:username
         AuthenticationIdentityEnum authenticationIdentityEnum = IBaseEnum.getEnumByValue(RequestUtils.getAuthenticationIdentity(), AuthenticationIdentityEnum.class);
         UserDetailsService userDetailsService = userDetailsServiceMap.get(clientId);
-        if (clientId.equals(SecurityConstants.APP_CLIENT_ID)) {
-            // 移动端的用户体系是会员，认证方式是通过手机号 mobile 认证
-            MemberUserDetailsServiceImpl memberUserDetailsService = (MemberUserDetailsServiceImpl) userDetailsService;
-            switch (authenticationIdentityEnum) {
-                case MOBILE:
-                    return memberUserDetailsService.loadUserByMobile(authentication.getName());
-                default:
-                    return memberUserDetailsService.loadUserByUsername(authentication.getName());
-            }
-        } else if (clientId.equals(SecurityConstants.WEAPP_CLIENT_ID)) {
-            // 小程序的用户体系是会员，认证方式是通过微信三方标识 openid 认证
-            MemberUserDetailsServiceImpl memberUserDetailsService = (MemberUserDetailsServiceImpl) userDetailsService;
-            switch (authenticationIdentityEnum) {
-                case OPENID:
-                    return memberUserDetailsService.loadUserByOpenId(authentication.getName());
-                default:
-                    return memberUserDetailsService.loadUserByUsername(authentication.getName());
-            }
-        } else if (clientId.equals(SecurityConstants.ADMIN_CLIENT_ID)) {
+        if (clientId.equals(SecurityConstants.ADMIN_CLIENT_ID)) {
             // 管理系统的用户体系是系统用户，认证方式通过用户名 username 认证
             switch (authenticationIdentityEnum) {
                 default:

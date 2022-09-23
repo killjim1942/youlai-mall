@@ -16,14 +16,6 @@
         <module>youlai-admin</module>
         <module>youlai-auth</module>
 
-        <!-- 商城模块 -->
-        <module>mall-sms</module>
-        <module>mall-ums</module>
-        <module>mall-pms</module>
-        <module>mall-oms</module>
-
-        <!-- 实验室模块(可忽略，无关业务的真实和模拟交互空间) -->
-        <module>youlai-lab</module>
     </modules>
 
     <parent>

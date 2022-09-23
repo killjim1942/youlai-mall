@@ -1,9 +1,6 @@
 package com.youlai.auth.security.config;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
-import com.youlai.auth.security.extension.mobile.SmsCodeAuthenticationProvider;
-import com.youlai.auth.security.extension.wechat.WechatAuthenticationProvider;
-import com.youlai.mall.ums.api.MemberFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +25,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService sysUserDetailsService;
     private final UserDetailsService memberUserDetailsService;
     private final WxMaService wxMaService;
-    private final MemberFeignClient memberFeignClient;
     private final StringRedisTemplate redisTemplate;
 
 
@@ -56,37 +52,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(wechatAuthenticationProvider()).
-                authenticationProvider(daoAuthenticationProvider()).
-                authenticationProvider(smsCodeAuthenticationProvider());
+        auth.authenticationProvider(daoAuthenticationProvider());
     }
 
-    /**
-     * 手机验证码认证授权提供者
-     *
-     * @return
-     */
-    @Bean
-    public SmsCodeAuthenticationProvider smsCodeAuthenticationProvider() {
-        SmsCodeAuthenticationProvider provider = new SmsCodeAuthenticationProvider();
-        provider.setUserDetailsService(memberUserDetailsService);
-        provider.setRedisTemplate(redisTemplate);
-        return provider;
-    }
 
-    /**
-     * 微信认证授权提供者
-     *
-     * @return
-     */
-    @Bean
-    public WechatAuthenticationProvider wechatAuthenticationProvider() {
-        WechatAuthenticationProvider provider = new WechatAuthenticationProvider();
-        provider.setUserDetailsService(memberUserDetailsService);
-        provider.setWxMaService(wxMaService);
-        provider.setMemberFeignClient(memberFeignClient);
-        return provider;
-    }
 
 
     /**
